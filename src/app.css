@@ -1,0 +1,44 @@
+/*Inget nytt*/
+body {
+	font-family: sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+/* src/app.css */
+
+/* Grundläggande reset - ta bort standardmarginaler och padding */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box; /* VIKTIGT! Inkludera padding och border i elementets bredd/höjd */
+}
+
+body {
+	font-family: sans-serif;
+	line-height: 1.6; /* Förbättra läsbarheten */
+	color: #333; /* Mörkgrå textfärg */
+	background-color: #fff; /* Vit bakgrund */
+}
+
+/* Maxbredd för innehållet, och centrering */
+.container { /* Du kan använda en container-klass om du vill */
+	max-width: 800px;
+	margin: 0 auto; /* Centrera horisontellt */
+	padding: 0 1rem; /* Lite padding på sidorna */
+}
+
+/* Responsiva bilder (viktigt för Chart.js canvas) */
+img,
+canvas {
+	max-width: 100%; /* Se till att bilder/canvas inte blir större än sin container */
+	height: auto; /* Behåll bildförhållandet */
+	display: block; /*Fixar konstigheter runt canvas*/
+}
+
+/* Valfritt: lite grundläggande stil för rubriker */
+h1,
+h2,
+h3 {
+	margin-bottom: 0.5rem; /* Lite utrymme under rubriker */
+}
