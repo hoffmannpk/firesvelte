@@ -4,6 +4,8 @@
 	import { onMount } from 'svelte';
 	import Chart from 'chart.js/auto';
 	import type { ChartData, ChartDataset, ChartOptions } from 'chart.js';
+    import { goto } from '$app/navigation';
+
 
 	let principal: number = 0; // Startkapital behövs inte på den här sidan
 	let annualRate: number = 0.07;
@@ -30,16 +32,7 @@
 
 		const calcData = calculateCompoundInterest(principal, annualRate, years, monthlyContribution);
 		chartData = calcData.results;
-        //chartDataNoContribution = calcData.resultsWithoutContribution; //Fel, använd inte denna.
-
-        // --- Korrekt beräkning för chartDataNoContribution ---
-        chartDataNoContribution = [];
-        let accumulated = 0;
-        for (let year = 1; year <= years; year++) {
-            accumulated += monthlyContribution * 12; // Ackumulera för varje år
-            chartDataNoContribution.push(roundToNearestHundred(accumulated)); //Avrunda och lägg till
-        }
-        // --------------------------------------------------------
+		chartDataNoContribution = calcData.resultsWithoutContribution;
 
 		//Beräkna total insättning
 		totalContributions = roundToNearestHundred(years * 12 * monthlyContribution);
@@ -61,7 +54,7 @@
 			const datasets: ChartDataset<'line'>[] = [
 				{
 					label: 'Insättningar', //Tydligare label
-					data: chartDataNoContribution, // Använd den korrekt beräknade datan
+					data: chartDataNoContribution,
 					borderColor: 'lightblue',
 					backgroundColor: 'lightblue',
 					fill: true,
@@ -135,7 +128,7 @@
 			});
 		}, 0);
 	}
-	
+
 	function roundToNearestHundred(value: number): number {
 		return Math.round(value / 100) * 100;
 	}
@@ -144,6 +137,12 @@
 	function formatNumberWithSpaces(number: number): string {
 		return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 	}
+
+    //Ny funktion som anropas vid klick.
+    function goToNextPage() {
+        const url = `/vad-vill-jag-spara-i?monthlyContribution=${monthlyContribution}&years=${years}&annualRate=${annualRate}`;
+        goto(url);
+    }
 </script>
 
 <Header />
@@ -173,12 +172,14 @@
 		</div>
 
 		<button class="calculate-button" on:click={calculateAndDrawChart}>Beräkna</button>
+        <button class="calculate-button" on:click={goToNextPage}>Nästa sida</button>
 	</div>
 
 	{#if showChart}
 		<h2>Tillväxt över tid</h2>
 		<div class="chart-container">
-			<canvas id="myChart"></canvas>  </div>
+			<canvas id="myChart"></canvas>
+		</div>
 
 		<div class="results">
 			<div class="result-box">
